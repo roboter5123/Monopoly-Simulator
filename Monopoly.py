@@ -2,13 +2,20 @@ from sys import argv
 import random
 import datetime
 
-scipt, max_rounds = argv
+try:
+
+    scipt, max_rounds = argv
+
+except ValueError:
+
+    print("Enter an integer as a commandline argument")
+    exit(1)
 
 try:
     max_rounds = int(max_rounds)
 
 except ValueError:
-    print("Not an integer")
+    print("Enter an integer as a commandline argument")
     exit(1)
 
 ###################################################################
@@ -52,7 +59,7 @@ def jail(position, positions, log):
 
 #############################
 
-def Community_chest(position, positions, log):
+def community_chest(position, positions, log):
 
     draw = random.randint(1, 16)
 
@@ -146,10 +153,26 @@ def chance(position, positions, log):
             log.write(f"Chance card. Go to 25 ")
             position = 35
 
+    elif draw == 9:
+
+        if position != 36:
+
+            position -=3
+            log.write(f"Chance card. Go to {position - 3} ")
+
+        else:
+
+            log.write(f"Chance card. Go to {position - 3} ")
+            position -= 3
+            positions[position] +=1
+            position, positions = community_chest(position, positions, log)
+
+
+
 #Continue here!!!! go back 3 spaces!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     else:
 
-        log.write(f"Chance card.No Movement")
+        log.write(f"Chance card.No Movement ")
 
     positions[position] +=1
     return position, positions
@@ -180,7 +203,7 @@ for rounds in range(0, max_rounds):
     log.write(f"Position nach wurf ohne Jail: {position} ")
 
     if position == 2 or position == 17 or position == 3:
-        position, positions = Community_chest(position, positions, log)
+        position, positions = community_chest(position, positions, log)
 
     elif position == 7 or position == 22 or position == 36:
 
